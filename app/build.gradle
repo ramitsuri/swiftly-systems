@@ -1,7 +1,6 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'kotlin-android-extensions'
 }
 
 android {
@@ -61,7 +60,12 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttpLogging_version"
 
+    // RecyclerView
     implementation "androidx.recyclerview:recyclerview:$recycler_version"
+
+    // Navigation components
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
     // Testing dependencies
     testImplementation "junit:junit:$junit_version"

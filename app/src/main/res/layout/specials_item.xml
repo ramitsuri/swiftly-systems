@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="8dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineVertical1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineVertical2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.95" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineHorizontal1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.05" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineHorizontal2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.95" />
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:contentDescription="@string/content_description_image"
+            app:layout_constraintBottom_toTopOf="@id/textDisplayName"
+            app:layout_constraintEnd_toStartOf="@id/textNewPrice"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@id/guidelineVertical1"
+            app:layout_constraintTop_toBottomOf="@id/guidelineHorizontal1" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/textOldPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textSize="@dimen/text_body1"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/textNewPrice"
+            app:layout_constraintEnd_toStartOf="@id/guidelineVertical2"
+            app:layout_constraintTop_toTopOf="@id/guidelineHorizontal1"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="$2.00" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/textNewPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textSize="@dimen/text_body1"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/textDisplayName"
+            app:layout_constraintEnd_toStartOf="@id/guidelineVertical2"
+            app:layout_constraintTop_toBottomOf="@id/textOldPrice"
+            tools:text="$1.00" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/textDisplayName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="2"
+            android:textSize="@dimen/text_body1"
+            app:layout_constraintBottom_toTopOf="@id/guidelineHorizontal2"
+            app:layout_constraintEnd_toStartOf="@id/guidelineVertical2"
+            app:layout_constraintStart_toEndOf="@id/guidelineVertical1"
+            tools:text="Noodle Dish with Roasted Black Bean Sauce" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>
