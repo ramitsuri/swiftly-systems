@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ramitsuri.swiftly.App
 import com.ramitsuri.swiftly.data.Result
@@ -15,8 +14,6 @@ import com.ramitsuri.swiftly.databinding.FragmentSpecialsBinding
 import com.ramitsuri.swiftly.entities.SpecialsInfo
 import com.ramitsuri.swiftly.ui.adapter.SpecialsAdapter
 import com.ramitsuri.swiftly.viewmodel.SpecialsViewModel
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class SpecialsFragment : BaseFragment() {
@@ -64,24 +61,22 @@ class SpecialsFragment : BaseFragment() {
         binding.listView.adapter = adapter
 
 
-        lifecycleScope.launch {
-            viewModel.getManagerSpecials().collect { result ->
-                when (result) {
-                    is Result.Loading -> {
-                        showProgress(true)
-                    }
-                    is Result.Success -> {
-                        showProgress(false)
-                        adapter.update(result.data.specials, 0)
-                    }
-                    is Result.Error -> {
-                        showProgress(false)
-                        showError(result.message)
-                    }
-
+        viewModel.getManagerSpecials().observe(viewLifecycleOwner, { result ->
+            when (result) {
+                is Result.Loading -> {
+                    showProgress(true)
                 }
+                is Result.Success -> {
+                    showProgress(false)
+                    adapter.update(result.data.specials, 0)
+                }
+                is Result.Error -> {
+                    showProgress(false)
+                    showError(result.message)
+                }
+
             }
-        }
+        })
     }
 
     private fun onManagerSpecialSelected(info: SpecialsInfo) {

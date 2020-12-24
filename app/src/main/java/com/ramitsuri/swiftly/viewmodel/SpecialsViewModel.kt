@@ -1,11 +1,52 @@
 package com.ramitsuri.swiftly.viewmodel
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.ramitsuri.swiftly.data.EventManager
+import com.ramitsuri.swiftly.data.Result
 import com.ramitsuri.swiftly.data.SpecialsRepository
+import com.ramitsuri.swiftly.entities.ManagerSpecialsResponse
+import com.ramitsuri.swiftly.event.EventService
+import com.ramitsuri.swiftly.event.EventType
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class SpecialsViewModel(
-    private val repository: SpecialsRepository
+    private val repository: SpecialsRepository,
+    private val eventManager: EventManager
 ) : ViewModel() {
+    init {
+        viewModelScope.launch {
+            eventManager.get().collect { type ->
+                Timber.i("Event received: $type")
+                if (type == EventType.ManagerSpecials) {
+                    refresh()
+                }
+            }
+        }
+        EventService.logToken()
+    }
 
-    fun getManagerSpecials() = repository.getManagerSpecials()
+    private val managerSpecials = MutableLiveData<Result<ManagerSpecialsResponse>>()
+
+    fun getManagerSpecials(): LiveData<Result<ManagerSpecialsResponse>> {
+        refresh()
+        return managerSpecials
+    }
+
+    private fun refresh() {
+        viewModelScope.launch {
+            repository.getManagerSpecials().collect {
+                managerSpecials.postValue(it)
+            }
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        Timber.i("Cleared")
+    }
 }
