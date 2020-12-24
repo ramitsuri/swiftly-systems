@@ -1,9 +1,6 @@
 package com.ramitsuri.swiftly.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.ramitsuri.swiftly.data.EventManager
 import com.ramitsuri.swiftly.data.Result
 import com.ramitsuri.swiftly.data.SpecialsRepository
@@ -18,15 +15,15 @@ class SpecialsViewModel(
     private val repository: SpecialsRepository,
     private val eventManager: EventManager
 ) : ViewModel() {
-    init {
-        viewModelScope.launch {
-            eventManager.get().collect { type ->
-                Timber.i("Event received: $type")
-                if (type == EventType.ManagerSpecials) {
-                    refresh()
-                }
-            }
+    private val eventObserver = Observer<EventType> { type ->
+        Timber.i("Event received: $type")
+        if (type == EventType.ManagerSpecials) {
+            refresh()
         }
+    }
+
+    init {
+        eventManager.get().observeForever(eventObserver)
         EventService.logToken()
     }
 
@@ -48,5 +45,6 @@ class SpecialsViewModel(
     override fun onCleared() {
         super.onCleared()
         Timber.i("Cleared")
+        eventManager.get().removeObserver(eventObserver)
     }
 }

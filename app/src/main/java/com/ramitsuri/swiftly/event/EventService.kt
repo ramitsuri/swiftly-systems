@@ -4,8 +4,6 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.ramitsuri.swiftly.App
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class EventService : FirebaseMessagingService() {
@@ -17,11 +15,7 @@ class EventService : FirebaseMessagingService() {
     }
 
     private fun onEventReceived(eventType: EventType) {
-        App.instance.injector.getEventManager().apply {
-            GlobalScope.launch {
-                add(eventType)
-            }
-        }
+        App.instance.injector.getEventManager().add(eventType)
     }
 
     override fun onNewToken(token: String) {
