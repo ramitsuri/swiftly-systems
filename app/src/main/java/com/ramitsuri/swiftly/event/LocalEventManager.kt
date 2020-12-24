@@ -1,10 +1,9 @@
-package com.ramitsuri.swiftly.data
+package com.ramitsuri.swiftly.event
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.ramitsuri.swiftly.event.EventType
 
-object LocalEventManager : EventManager {
+class LocalEventManager : EventManager {
     private val eventType = MutableLiveData<EventType>()
 
     override fun get(): LiveData<EventType> {

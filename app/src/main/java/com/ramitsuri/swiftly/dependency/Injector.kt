@@ -1,8 +1,8 @@
 package com.ramitsuri.swiftly.dependency
 
 import com.ramitsuri.swiftly.api.ApiService
-import com.ramitsuri.swiftly.data.EventManager
-import com.ramitsuri.swiftly.data.LocalEventManager
+import com.ramitsuri.swiftly.event.EventManager
+import com.ramitsuri.swiftly.event.LocalEventManager
 import com.ramitsuri.swiftly.data.SpecialsRepository
 import com.ramitsuri.swiftly.utils.CurrencyFormatter
 import com.ramitsuri.swiftly.viewmodel.SpecialsViewModelFactory
@@ -10,8 +10,9 @@ import java.util.*
 
 class Injector() {
     private val specialsRepository = SpecialsRepository(ApiService.create())
+    private val eventManager: EventManager = LocalEventManager()
 
-    fun getEventManager(): EventManager = LocalEventManager
+    fun getEventManager() = eventManager
     fun getSpecialsViewModelFactory() =
         SpecialsViewModelFactory(specialsRepository, getEventManager())
 

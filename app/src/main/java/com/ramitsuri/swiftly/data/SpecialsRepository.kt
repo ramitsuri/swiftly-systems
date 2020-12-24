@@ -11,15 +11,22 @@ import timber.log.Timber
 
 class SpecialsRepository(private val api: ApiService) {
 
+    private var cache: ManagerSpecialsResponse? = null
+
     fun getManagerSpecials(): Flow<Result<ManagerSpecialsResponse>> {
         return flow<Result<ManagerSpecialsResponse>> {
             emit(Result.loading())
-            val response = api.get()
-            if (response.isSuccessful && response.body() != null) {
-                val param = response.body()!!
-                emit(Result.success(param))
-            } else {
-                emit(Result.error(response.message()))
+            cache?.let {
+                emit(Result.success(it))
+            } ?: run {
+                val response = api.get()
+                if (response.isSuccessful && response.body() != null) {
+                    val managerSpecialsResponse = response.body()!!
+                    cache = managerSpecialsResponse
+                    emit(Result.success(managerSpecialsResponse))
+                } else {
+                    emit(Result.error(response.message()))
+                }
             }
         }.catch {
             emit(Result.error("Network error!"))

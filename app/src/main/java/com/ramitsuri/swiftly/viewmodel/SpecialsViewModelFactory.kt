@@ -2,7 +2,7 @@ package com.ramitsuri.swiftly.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.ramitsuri.swiftly.data.EventManager
+import com.ramitsuri.swiftly.event.EventManager
 import com.ramitsuri.swiftly.data.SpecialsRepository
 
 class SpecialsViewModelFactory(

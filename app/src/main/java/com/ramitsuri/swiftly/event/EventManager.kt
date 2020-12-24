@@ -1,4 +1,4 @@
-package com.ramitsuri.swiftly.data
+package com.ramitsuri.swiftly.event
 
 import androidx.lifecycle.LiveData
 import com.ramitsuri.swiftly.event.EventType

@@ -1,7 +1,7 @@
 package com.ramitsuri.swiftly.viewmodel
 
 import androidx.lifecycle.*
-import com.ramitsuri.swiftly.data.EventManager
+import com.ramitsuri.swiftly.event.EventManager
 import com.ramitsuri.swiftly.data.Result
 import com.ramitsuri.swiftly.data.SpecialsRepository
 import com.ramitsuri.swiftly.entities.ManagerSpecialsResponse
