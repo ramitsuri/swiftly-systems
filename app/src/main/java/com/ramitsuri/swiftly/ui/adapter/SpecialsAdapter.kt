@@ -3,21 +3,26 @@ package com.ramitsuri.swiftly.ui.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import com.ramitsuri.swiftly.utils.CurrencyFormatter
 import com.ramitsuri.swiftly.databinding.SpecialsItemBinding
 import com.ramitsuri.swiftly.entities.SpecialsInfo
 
 class SpecialsAdapter(
-    private val list: MutableList<SpecialsInfo>
+    private val list: MutableList<SpecialsInfo>,
+    private val currencyFormatter: CurrencyFormatter
 ) :
     RecyclerView.Adapter<SpecialsAdapter.ViewHolder>() {
 
+    private var canvasUnit = 1
     var onItemClick: ((SpecialsInfo) -> Unit)? = null
 
-    fun update(newList: List<SpecialsInfo>) {
+    fun update(newList: List<SpecialsInfo>, canvasUnit: Int) {
         list.apply {
             clear()
             addAll(newList)
         }
+        this.canvasUnit = canvasUnit
         notifyDataSetChanged()
     }
 
@@ -45,8 +50,9 @@ class SpecialsAdapter(
         fun bind(item: SpecialsInfo) {
             binding.apply {
                 textDisplayName.text = item.displayName
-                textOldPrice.text = item.oldPrice.toString()
-                textNewPrice.text = item.newPrice.toString()
+                textOldPrice.text = currencyFormatter.format(item.oldPrice)
+                textNewPrice.text = currencyFormatter.format(item.newPrice)
+                binding.image.load(item.imageUrl)
             }
         }
     }

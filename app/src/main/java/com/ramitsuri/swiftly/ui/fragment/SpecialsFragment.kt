@@ -54,7 +54,8 @@ class SpecialsFragment : BaseFragment() {
 
     private fun setupViews() {
         val adapter = SpecialsAdapter(
-            mutableListOf()
+            mutableListOf(),
+            App.instance.injector.getCurrencyFormatter()
         )
         adapter.onItemClick = {
             onManagerSpecialSelected(it)
@@ -71,7 +72,7 @@ class SpecialsFragment : BaseFragment() {
                     }
                     is Result.Success -> {
                         showProgress(false)
-                        adapter.update(result.data.specials)
+                        adapter.update(result.data.specials, 0)
                     }
                     is Result.Error -> {
                         showProgress(false)
