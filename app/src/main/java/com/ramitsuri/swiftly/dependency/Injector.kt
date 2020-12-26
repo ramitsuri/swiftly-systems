@@ -10,6 +10,7 @@ import java.util.*
 
 class Injector() {
     private val specialsRepository = SpecialsRepository(ApiService.create())
+    // Replace with MockEventManager() to simulate updates
     private val eventManager: EventManager = LocalEventManager()
 
     fun getEventManager() = eventManager

@@ -18,11 +18,14 @@ import com.ramitsuri.swiftly.viewmodel.SpecialsViewModel
 import timber.log.Timber
 
 class SpecialsFragment : BaseFragment() {
+    private val defaultGridSpanCount = 16
+
     private var _binding: FragmentSpecialsBinding? = null
 
     private val binding get() = _binding!!
     private lateinit var viewModel: SpecialsViewModel
     private lateinit var adapter: SpecialsAdapter
+    private lateinit var layoutManager: GridLayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +63,8 @@ class SpecialsFragment : BaseFragment() {
         adapter.onItemClick = {
             onManagerSpecialSelected(it)
         }
+        layoutManager = GridLayoutManager(activity, defaultGridSpanCount)
+        binding.listView.layoutManager = layoutManager
         binding.listView.adapter = adapter
 
         viewModel.getManagerSpecials().observe(viewLifecycleOwner, { result ->
@@ -81,13 +86,12 @@ class SpecialsFragment : BaseFragment() {
     }
 
     private fun setupSpecialsList(managerSpecialsResponse: ManagerSpecialsResponse) {
-        val layoutManager = GridLayoutManager(activity, managerSpecialsResponse.canvasUnit)
+        layoutManager.spanCount = managerSpecialsResponse.canvasUnit
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 return adapter.getItemWidthSpan(position)
             }
         }
-        binding.listView.layoutManager = layoutManager
         adapter.update(managerSpecialsResponse.specials, managerSpecialsResponse.canvasUnit)
     }
 
@@ -111,5 +115,15 @@ class SpecialsFragment : BaseFragment() {
         activity?.supportFragmentManager?.let { supportFragmentManager ->
             fragment.show(supportFragmentManager, ErrorFragment.TAG)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.onViewResumed()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.onViewPaused()
     }
 }
