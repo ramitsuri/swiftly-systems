@@ -7,10 +7,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.ramitsuri.swiftly.App
 import com.ramitsuri.swiftly.data.Result
 import com.ramitsuri.swiftly.databinding.FragmentSpecialsBinding
+import com.ramitsuri.swiftly.entities.ManagerSpecialsResponse
 import com.ramitsuri.swiftly.entities.SpecialsInfo
 import com.ramitsuri.swiftly.ui.adapter.SpecialsAdapter
 import com.ramitsuri.swiftly.viewmodel.SpecialsViewModel
@@ -21,6 +22,7 @@ class SpecialsFragment : BaseFragment() {
 
     private val binding get() = _binding!!
     private lateinit var viewModel: SpecialsViewModel
+    private lateinit var adapter: SpecialsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,16 +52,15 @@ class SpecialsFragment : BaseFragment() {
     }
 
     private fun setupViews() {
-        val adapter = SpecialsAdapter(
+        adapter = SpecialsAdapter(
             mutableListOf(),
-            App.instance.injector.getCurrencyFormatter()
+            App.instance.injector.getCurrencyFormatter(),
+            requireActivity()
         )
         adapter.onItemClick = {
             onManagerSpecialSelected(it)
         }
-        binding.listView.layoutManager = LinearLayoutManager(activity)
         binding.listView.adapter = adapter
-
 
         viewModel.getManagerSpecials().observe(viewLifecycleOwner, { result ->
             when (result) {
@@ -68,7 +69,7 @@ class SpecialsFragment : BaseFragment() {
                 }
                 is Result.Success -> {
                     showProgress(false)
-                    adapter.update(result.data.specials, 0)
+                    setupSpecialsList(result.data)
                 }
                 is Result.Error -> {
                     showProgress(false)
@@ -77,6 +78,17 @@ class SpecialsFragment : BaseFragment() {
 
             }
         })
+    }
+
+    private fun setupSpecialsList(managerSpecialsResponse: ManagerSpecialsResponse) {
+        val layoutManager = GridLayoutManager(activity, managerSpecialsResponse.canvasUnit)
+        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return adapter.getItemWidthSpan(position)
+            }
+        }
+        binding.listView.layoutManager = layoutManager
+        adapter.update(managerSpecialsResponse.specials, managerSpecialsResponse.canvasUnit)
     }
 
     private fun onManagerSpecialSelected(info: SpecialsInfo) {

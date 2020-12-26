@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Text Sizes -->
-    <dimen name="text_caption">12sp</dimen>
+    <dimen name="text_caption1">8sp</dimen>
+    <dimen name="text_caption2">12sp</dimen>
     <dimen name="text_body1">16sp</dimen>
-    <dimen name="text_h6">20sp</dimen>
-    <dimen name="text_h5">24sp</dimen>
+    <dimen name="text_body2">20sp</dimen>
+    <dimen name="text_body3">24sp</dimen>
+
+    <dimen name="content_padding">16dp</dimen>
+    <dimen name="content_margin">8dp</dimen>
+    <dimen name="card_corner_radius">8dp</dimen>
 </resources>
